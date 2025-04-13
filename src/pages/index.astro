@@ -1,0 +1,239 @@
+---
+import Welcome from '../components/Welcome.astro';
+import Layout from '../layouts/Layout.astro';
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+
+<Layout>
+	<Welcome />
+</Layout>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My CV</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <div class = "header-container">
+            <div class = "header-title">
+                <h1>Alejandro Jiménez López</h1>
+                <p>Health Economist & Data Scientist </p>
+                <p><i class="fas fa-globe"></i> Barcelona, Spain</p>
+            </div>
+            <img src="\pic.jpg" alt="Profile Picture" class="profile-pic" />
+        </div>
+        </header>
+         
+         
+        <!-- Social Links -->
+        <nav>
+            <a href="https://es.linkedin.com/in/alejandro-jim%C3%A9nez-l%C3%B3pez/es" target="_blank" title="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="mailto:alexbusinessjl@gmail.com" title="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <a href="https://github.com/XimeCodeDS" target="_blank" title="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://medium.com/@alexjimenezlopez" target="_blank" title="Medium">
+                <i class="fab fa-medium"></i>
+            </a>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>About</h2>
+            <p>  Economist and data scientist with specialized training in health economics, currently building pharmaceutical industry expertise through Sanofi's Graduate Program. I bring to the table analytical capabilities with healthcare market insights to deliver value-based solutions. Strategically positioned to excel in market access by leveraging financial acumen and healthcare economic evaluation skills.</p>
+        </section>
+        <section>
+            <h2>Contact Information</h2>
+            <ul>
+                <li>Email: alexbusinessjl@gmail.com</li>
+                <li>Phone: +34 603 824 830</li>
+                
+            </ul>
+        </section>
+        <section>
+            <h2>Experience</h2>
+            <strong>Sanofi</strong>
+            <p style="font-weight: bold;></pstyle> color: #001;"> Financial Analyst, 2024-Present</p>
+            <p>Responsible for the financial analysis , forecasting and planning  in the Iberia region (Spain & Portugal) for all global business units; specialty care, vaccines, general medicine and R&D. 
+            <p>Part-time collaboration as a data scientist working in cross-functional projects with the advanced data analytics team</p>
+            <p>Continuos training in Market access to facili my transitions into a health economics role</p>
+            <p>Data analysis, dashboard creation and reporting with Power BI</p>
+            <p>Power BI ambassador for the Iberia region, providing training to all the business partners</p>
+            <p>Processes automation using different tools such as Power Automate</p>
+            <p>Additional projects : Leader of an ERG  (Employee Resource Group), managing over 20 people, leading and implementing initiatives to tackle ageism.</p>
+            <strong>BBVA</strong>
+            <p>Commercial Banking Manager, 2022-2024</p>
+        </section>
+        <section>
+            <h2>Education</h2>
+            <ul>
+                <li>Master of Science in Health Economics. Universidad Internacional de la Rioja. 2024-2025</li>
+                <li>Master of Science in Data Science. Kschool. 2024-2025</li>
+                <li>Master in International Sports Management (MBA). European Sports Business School. 2021-2022</li>
+                <li>Bachelor of Economics. Universidad Complutense de Madrid. 2017-2021</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Skills</h2>
+            <div class="skills-container">
+                <div class="skill">
+                    <i class="fab fa-python"></i> <!-- Icon -->
+                    <span>Python</span> <!-- Skill Text -->
+                </div>
+                <div class="skill">
+                    <i class="fa-solid fa-flask"></i> <!-- Icon -->
+                    <span>Pharmaceutical industry</span> <!-- Skill Text -->
+                </div>
+                <div class="skill">
+                    <i class="fa-solid fa-calculator"></i> <!-- Icon -->
+                    <span>Pharmaecoeconomic evaluation</span> <!-- Skill Text -->
+                </div>
+                <div class="skill">
+                    <i class="fa-solid fa-industry"></i> <!-- Icon -->
+                    <span>Market access</span> <!-- Skill Text -->
+                </div>
+                <div class="skill">
+                    <i class="fas fa-chart-bar"></i> <!-- Icon -->
+                    <span>Power BI</span>
+                </div>
+                <div class="skill">
+                    <i class="fas fa-th"></i> <!-- Icon -->
+                    <span>Tableau</span>
+                </div>
+                <div class="skill">
+                    <i class="fas fa-database"></i> <!-- Icon -->
+                    <span>SQL</span>
+                </div>
+                <div class="skill">
+                    <i class="fas fa-chart-line"></i> <!-- Icon -->
+                    <span>Data Visualization</span>
+                </div>
+                <div class="skill">
+                    <i class="fas fa-tools"></i> <!-- Icon -->
+                    <span>Machine Learning</span>
+                </div>
+                <div class = "skill">
+                    <i class="fab fa-github"></i>
+                    <span>Github</span>
+                </div>
+                <div class = "skill">
+                    <i class="fas fa-code-branch"></i>
+                    <span>Git</span>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    <div>
+        <button id ="chatbot-open">Open ChatMe</button>
+    </div>
+
+    <div id = "chatbot">
+        <div id = "chatbot-header">
+            <span> Welcome to ChatMe, ask anything about Alex´s profile </span>
+            <button id ="chatbot-close">&times;</button>
+        </div>
+        <div id = "chatbot-body">
+            <div id = "chatbot-messages">
+            <input
+                    type = "text"
+                    id = "chatbot-input"
+                    placeholder = "Type your question here..."
+            />
+            <button id = "chatbot-send">Send!</button>
+        </div>
+
+    </div>
+    <button id = "chatbot-toggle">X</button> 
+
+<!--Chatbot script --> 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+     const chatbotToggle = document.getElementById('chatbot-toggle');
+     const chatbot = document.getElementById('chatbot');
+     const chatbotClose = document.getElementById('chatbot-close');
+     const chatbotMessages = document.getElementById('chatbot-messages');
+     const chatbotInput = document.getElementById('chatbot-input');
+     const chatbotSend = document.getElementById('chatbot-send');
+    
+
+    // Toggle chatbot visibility
+    chatbotToggle?.addEventListener('click', () => {
+        if (chatbot) {
+            chatbot.style.display = chatbot.style.display === 'none' ? 'block' : 'none';
+        }
+    });
+
+    // Close chatbot
+     chatbotClose?.addEventListener('click', () => {
+        if (chatbot) {
+            chatbot.style.display = 'none';
+        }
+    });
+
+    // Handle message sending
+     chatbotSend?.addEventListener('click', () => {
+        const userMessage = (chatbotInput as HTMLInputElement)?.value.trim();
+        if (userMessage) {
+            // Display user message
+            const userBubble = document.createElement('div');
+            userBubble.textContent = userMessage;
+            userBubble.style.cssText = 'text-align: right; color: blue; margin: 5px;';
+            chatbotMessages?.appendChild(userBubble);
+
+            // Respond with predefined answers
+            const botBubble = document.createElement('div');
+            botBubble.style.cssText = 'text-align: left; color: black; margin: 5px;';
+            botBubble.textContent = getBotResponse(userMessage);
+            chatbotMessages?.appendChild(botBubble);
+
+            // Clear input and scroll to the bottom
+            if (chatbotInput) {
+                (chatbotInput as HTMLInputElement).value = '';
+            }
+            if (chatbotMessages) {
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
+        }
+    });
+
+    // Chatbot response logic
+    function getBotResponse(message: string): string {
+        message = message.toLowerCase();
+        if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
+            return 'Hello! How can I help you today?';
+        } else
+        if (message.includes('how are you')) {
+            return 'I am a bot, I do not have feelings, but thanks for asking!';
+        } else
+        if (message.includes('name')|| message.includes('who are you') || message.includes('who')) {
+            return 'I am Alejandro\'s CV bot! How can I help?';
+        } else if (message.includes('experience')) {
+            return 'Alejandro has experience as a Financial Analyst and Commercial Banking Manager.';
+        } else if (message.includes('skills')) {
+            return 'Alejandro is skilled in Data Science, Python, Power BI, and Tableau.';
+        } else if (message.includes('education')) {
+            return 'Alejandro has a Master of Science in Data Science and a Master of Science in Health Economics.';
+        } else if (message.includes('Who does Alex love') || message.includes('que ama Alex') || message.includes('love') || message.includes('loves')) {
+            return 'Alex loves Georgina to the moon and back';
+        } else {
+            return 'Sorry, I am still learning and cannot answer that question!, PS : I swear I learn fast!, Also, you can directly contact Alex at alexbusinessjl@gmail.com and he will be happy to help you!';
+        }       
+   }
+});
+</script>
+
+</body>
+</html>
+
