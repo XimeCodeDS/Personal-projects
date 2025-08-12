@@ -1,0 +1,427 @@
+SELECT * FROM patients;
+
+-- SELECT all patients
+SELECT first_name,
+       last_name
+FROM patients
+WHERE allergies IS NULL
+
+
+-- SELECT patients with specific allergies
+SELECT 
+    p.first_name,
+    p.last_name,
+    pr.name AS province
+FROM patients p
+JOIN province_names pr ON p.province_code = pr.code;
+
+-- SELECT patients born in 2010
+SELECT COUNT(*) AS total_patients
+FROM patients
+WHERE YEAR(birth_date) = 2010;
+
+-- SELECT patients with the maximum height
+SELECT first_name,
+       last_name,
+       MAX(height)
+FROM patients;
+
+
+
+-- SELECT patients with specifc IDs
+SELECT * FROM patients
+WHERE patient_id in (1,45,534,879,1000);
+
+
+
+SELECT* from admissions;
+
+-- select all admissions
+SELECT count(patient_id) AS total_admisions
+FROM admissions;
+
+
+-- patients admityed on the same day they were discharged
+SELECT * FROM admissions
+WHERE admission_date= discharge_date;
+
+-- number of visits for a specific patient
+
+SELECTt patient_id,
+       COUNT(patient_id) AS total_visits
+FROM admissions
+WHERE patient_id = 579;
+
+
+-- patients admitted in a specific province
+SELECT distinct city
+FROM patients
+WHERE province_id = 'NS';
+
+-- patients with height and weight above certain values
+SELECT first_name,
+       last_name,
+       birth_date
+FROM patients
+WHERE height > 160
+AND weight > 70;
+
+-- patients with allergies in Hamilton
+
+SELECT first_name,
+       last_name,
+       allergies
+FROM patients
+WHERE city = 'Hamilton'
+AND allergies IS NOT NULL;
+
+--show unique years of birth
+
+SELECT distinct  year(birth_date)
+FROM patients
+ORDER BY birth_date asc;
+
+
+-- patients with unique first names ONLY once in the database
+
+select first_name
+FROM patients
+group by first_name
+having COUNT(*) = 1;
+
+-- patients with first names starting and ending with 'S' and at least 6 characters long
+SELECT patient_id,
+       first_name
+FROM patients
+WHERE first_name LIKE 'S%S'
+AND len(first_name)>=6;
+
+
+-- patients with dementia diagnosis
+
+SELECT p.patient_id,
+       p.first_name,
+       p.last_name
+FROM patients p
+JOIN admissions ad ON p.patient_id = ad.patient_id
+WHERE diagnosis = 'Dementia';
+
+-- patients with first names ordered by length and alphabetically
+
+select first_name
+from patients
+order by len(first_name), first_name ASC;
+
+
+-- patient count by gender
+select COUNT(CASE WHEN gender = 'M' then 1 end) as MALE,
+       COUNT(CASE WHEN gender = 'F' then 1 end) as FEMALE
+from patients;
+
+-- patients with specific allergies
+SELECT first_name,
+       last_name,
+       allergies
+from patients
+WHERE allergies IN ('Penicillin','Morphine')
+ORDER BY allergies, first_name, last_name;
+
+
+-- patients with multiple admissions for the same diagnosis
+SELECT patient_id,
+       diagnosis
+FROM admissions
+group by 1,2
+HAVING COUNT(*) >1;
+
+
+-- total number of patients by city
+SELECT city,
+       COUNT(patient_id)  AS num_patients
+FROM patients
+group by city
+order by 2 desc, 1 ASC;
+
+
+-- all patients and doctors in tables
+
+SELECT first_name,
+       last_name,
+       'Patient' AS role
+from patients
+UNION all 
+SELECT first_name,
+       last_name,
+       'Doctor' AS doctor 
+FROM doctors;
+
+-- patients with allergies and their counts
+
+select distinct allergies,
+       COUNT(allergies)
+FROM patients
+WHERE allergies IS NOT null
+GROUP BY allergies
+ORDER BY 2 DESC;
+
+
+-- patients born in the 1970s ordered by birth date
+
+select first_name,
+       last_name,
+       birth_date
+FROM patients
+WHERE birth_date LIKE '197%'
+order by birth_date ASC;
+
+
+-- patients with first names in a specific format (last_name, first_name)
+
+SELECT
+CONCAT(upper(last_name),',',lower(first_name)) AS new_name_format
+FROM patients
+order by first_name desc;
+
+-- sum of height for each province where the total height is greater than 7000
+SELECT  DISTINCT province_id,
+       SUM(height) AS sum_height
+from patients
+group by 1
+HAVING SUM(height) > 7000;
+
+
+-- patients with last name 'Maroni' and their weight difference
+
+SELECT max(weight) - MIN(weight) AS weight_delta
+from patients
+WHERE last_name = 'Maroni';
+
+-- break down of admissions by day of the month
+
+select day(admission_date),
+       COUNT(DAY(admission_date))
+FROM admissions
+group by 1
+order by 2 desc;
+
+--  latest admission for a specific patient
+SELECT*FROM admissions
+WHERE patient_id = 542
+order by admission_date DESC
+limit 1;
+
+
+-- patients with specific conditions and doctors
+select patient_id, 
+       attending_doctor_id,
+       diagnosis
+from admissions
+WHERE (patient_id % 2 = 1 and attending_doctor_id IN (1,5,19))
+or 
+(attending_doctor_id LIKE '%2%' AND LEN(patient_id) =3)
+
+-- count visits for each doctor
+select d.first_name,
+       d.last_name,
+       COUNT(attending_doctor_id) AS total_admissions
+FROM doctors d
+JOIN admissions ad
+on d.doctor_id = ad.attending_doctor_id
+GROUP BY attending_doctor_id;
+
+-- first and last admission dates for each doctor
+
+SELECT d.doctor_id,
+       CONCAT(d.first_name,' ', d.last_name) AS full_name,
+       MIN(ad.admission_date) AS FIRST_ADMISSION,
+       MAX(ad.admission_date) as LAST_ADMISSION
+FROM doctors d
+JOIN admissions ad
+on d.doctor_id = ad.attending_doctor_id
+GROUP BY doctor_id;
+
+
+-- count of patients by province
+SELECT pr.province_name,
+       COUNT(p.patient_id)
+from province_names pr
+JOIN patients p
+ON pr.province_id = p.province_id
+group by 1
+ORDER BY  2 DESC;
+
+-- every admission with patient and doctor names
+
+select concat(p.first_name, ' ',p.last_name) AS PATIENT_NAME,
+       ad.diagnosis,
+       concat(dr.first_name, ' ' , dr.last_name) AS DOCTOR_NAME
+from admissions ad 
+JOIN patients p 
+ON p.patient_id = ad.patient_id
+JOIN doctors dr  
+ON ad.attending_doctor_id = dr.doctor_id;
+
+
+-- patients with duplicate first and last names
+SELECT first_name,
+       last_name,
+       COUNT(*) AS duplicates
+from patients
+group by first_name,last_name
+HAVING COUNT(*) > 1;
+
+
+-- patients with specific height and weight conversions
+
+SELECT concat(first_name,' ',last_name),
+       ROUND(height/30.48,1) as height_feet,
+       ROUND(weight * 2.205,0) as weight_kg,
+       birth_date,
+       CASE
+         when gender = 'M' THEN 'MALE'
+         when gender = 'F' THEN 'FEMALE'
+       END AS gender
+FROM patients;
+
+-- patients without admissions
+select p.patient_id,
+       p.first_name,
+       p.last_name
+FROM patients p
+left JOIN  admissions ad
+ON p.patient_id = ad.patient_id
+WHERE ad.patient_id IS NULL;
+
+
+
+-- max and min daily visits in admissions
+select MAX(daily_visits) AS MAX_VISTIS,
+       MIN(daily_visits) AS MIN_VISITS,
+       ROUND(AVG(daily_visits),2) AS AVG_VISITS
+   
+from( 
+    SELECT
+          admission_date,
+          COUNT(*) as daily_visits
+    FROM admissions
+    GROUp BY admission_date);
+
+--  grouping patients by weight in intervals of 10kg
+
+SELECT 
+    FLOOR(weight/ 10) * 10 AS weight_group,
+    COUNT(*) AS total_patients
+FROM 
+    patients
+GROUP BY 
+    weight_group
+ORDER BY 
+    weight_group DESC;
+
+
+--  patients with BMI calculation and obesity status
+
+SELECT patient_id, weight, height, 
+  (CASE 
+      WHEN weight/(POWER(height/100.0,2)) >= 30 THEN
+          1
+      ELSE
+          0
+      END) AS isObese
+FROM patients;
+
+-- patients with epilepsy diagnosis and doctor Lisa
+select p.patient_id,
+       p.first_name,
+       p.last_name,
+       dr.specialty
+FROM doctors dr
+JOIN admissions ad
+ON dr.doctor_id = ad.attending_doctor_id
+JOIN patients p
+ON ad.patient_id = p.patient_id
+WHERE diagnosis = 'Epilepsy'
+AND dr.first_name = 'Lisa';
+
+-- I created a password for each patient based on their ID, last name length, and birth year
+select  DISTINCT p.patient_id,
+       CONCAT(p.patient_id, Len(p.last_name), year(birth_date))
+FROM patients p
+RIGHT JOIN admissions ad
+ON p.patient_id = ad.patient_id;
+
+-- calculating the cost of admissions based on insurance status
+SELECT CASE
+       WHEN patient_id % 2 = 1 THEN 'NO'
+       WHEN patient_id % 2 = 0 THEN 'YES'
+       END as has_insurance,
+       SUM(
+       CASE 
+       WHEN  patient_id % 2 = 1 THEN 50
+       WHEN patient_id % 2 = 0  THEN 10
+       END) AS cost
+from admissions
+GROUP BY 1;
+
+-- provinces with more male patients
+
+SELECT prov.province_name
+from province_names prov
+JOIN patients p 
+on p.province_id = prov.province_id
+group by province_name
+HAVING COUNT(CASE WHEN p.gender = 'M' THEN 1 END) > count(CASE WHEN p.gender = 'F' THEN 1 END);
+
+-- query one patient with specific conditions
+
+SELECT * FROM patients
+where first_name like '__r%'
+      and gender = 'F'
+      and MONTH(birth_date) IN (2,5,12)
+      AND weight between 60 and 80
+      and patient_id % 2= 1
+      and city = 'Kingston';
+
+
+-- TWO queries to calculate the percentage of male patients
+SELECT concat(
+      ROUND(COUNT(CASE WHEN gender = 'M' THEN 1 END)*100.0 / count(patient_id),2),'%') AS PERCENTAGE_MALE_PATIENTS
+from patients;
+      
+SELECT 
+ROUND (100* AVG(gender = 'M'), 2) || '%' AS percentage_total_males
+FROM patients;
+
+
+
+-- admissions count change by date : use LAG function WHICH gives me the previous row value(day count)
+
+select distinct admission_date,
+       COUNT(*) AS total_admissions,
+       COUNT(*) - LAG(COUNT(*)) OVER(order by 2) as admissions_count_change
+FROM admissions
+group by 1
+ORDER BY 1 ASC;
+
+
+-- selecting province names ordered by specific province first (Ontario)
+
+select province_name
+FROM province_names
+ORDER BY 
+CASE WHEN province_id = 'ON' THEN 0 ELSE 1 END,
+province_name asc;
+
+
+-- count of admissions by doctor and year
+
+SELECT dr.doctor_id,
+       CONCAT(dr.first_name,' ', dr.last_name) AS doctor_name,
+       dr.specialty,
+       YEAR(ad.admission_date) AS YEAR,
+       COUNT(ad.admission_date) AS total_admissions
+FROM doctors dr
+JOIN admissions ad 
+on dr.doctor_id = ad.attending_doctor_id
+GROUP BY 1,4
+ORDER BY 1,4;
